@@ -1,0 +1,79 @@
+---
+title: "Configuration overview"
+description: "A summary of every configurable aspect of Voice Input — language selection, LLM refinement, and where settings are stored."
+---
+
+Voice Input keeps its configuration simple: there are no config files to edit manually. All settings are stored in **UserDefaults**, macOS's standard per-user preferences store. You change settings through the menu bar icon and the Settings window; everything is saved automatically or on demand.
+
+## What you can configure
+
+| Setting | Where to change it | Persisted in |
+|---|---|---|
+| Transcription language | Menu bar → language submenu | UserDefaults |
+| LLM refinement on/off | Menu bar → **LLM Refinement** toggle | UserDefaults |
+| API Base URL | Menu bar → **LLM Refinement** → **Settings** | UserDefaults |
+| API Key | Menu bar → **LLM Refinement** → **Settings** | UserDefaults |
+| Model name | Menu bar → **LLM Refinement** → **Settings** | UserDefaults |
+
+## Language selection
+
+Voice Input supports five transcription languages. The selected language is applied immediately to the next recording session and saved to UserDefaults so it persists across restarts.
+
+### Supported languages
+
+| Language | Locale code |
+|---|---|
+| English | `en-US` |
+| Simplified Chinese | `zh-CN` (default) |
+| Traditional Chinese | `zh-TW` |
+| Japanese | `ja-JP` |
+| Korean | `ko-KR` |
+
+### How to change the language
+
+<Steps>
+  <Step title="Click the menu bar icon">
+    Click the Voice Input icon in your macOS menu bar to open the menu.
+  </Step>
+  <Step title="Select your language">
+    Choose from the language options listed in the menu. The currently active language has a checkmark next to it.
+  </Step>
+</Steps>
+
+<Tip>
+  Simplified Chinese is selected by default. If you primarily dictate in English, switch to English once — the preference is remembered permanently.
+</Tip>
+
+## LLM refinement toggle
+
+You can enable or disable LLM refinement at any time without losing your API settings. The toggle is available directly from the menu bar.
+
+<Steps>
+  <Step title="Click the menu bar icon">
+    Click the Voice Input icon in your macOS menu bar.
+  </Step>
+  <Step title="Toggle LLM Refinement">
+    Click **LLM Refinement** in the menu. A checkmark indicates that refinement is enabled. Click again to disable it.
+  </Step>
+</Steps>
+
+When LLM refinement is enabled, the floating capsule displays a **Refining...** status after you release the Fn key, and injects the AI-corrected text once the model responds. When it is disabled, transcribed text is injected immediately.
+
+<Note>
+  Disabling LLM refinement does not clear your API credentials or model name. You can re-enable it at any time and pick up where you left off.
+</Note>
+
+## Where settings are stored
+
+Voice Input uses `UserDefaults` under your macOS user account. There is no configuration file on disk that you need to manage. To reset all settings, uninstall and reinstall Voice Input, or toggle each setting back to its default manually through the menu bar and Settings window.
+
+## Learn more
+
+<CardGroup cols={2}>
+  <Card title="LLM settings" icon="brain" href="/configuration/llm-settings">
+    Configure your OpenAI-compatible API endpoint, key, and model for AI-powered transcription refinement.
+  </Card>
+  <Card title="Required permissions" icon="shield-check" href="/configuration/permissions">
+    Grant the Microphone and Accessibility permissions Voice Input needs to function.
+  </Card>
+</CardGroup>

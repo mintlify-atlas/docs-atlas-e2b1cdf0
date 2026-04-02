@@ -1,0 +1,51 @@
+---
+title: "Voice Input"
+description: "A macOS menu-bar app that lets you dictate text into any input field by holding the Fn key — with real-time transcription, animated waveform UI, and optional LLM refinement."
+---
+
+Voice Input is a lightweight macOS menu-bar application that brings hands-free voice dictation to every app on your Mac. Hold the **Fn key** to start recording, speak naturally, and release to have your words instantly typed into whatever input field is focused — no switching apps, no manual copy-paste.
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Download the pre-built app or build from source
+  </Card>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get up and running in under 2 minutes
+  </Card>
+  <Card title="LLM Refinement" icon="brain" href="/guides/llm-refinement">
+    Connect an AI model to improve transcription accuracy
+  </Card>
+  <Card title="Keyboard Shortcuts" icon="keyboard" href="/reference/keyboard-shortcuts">
+    Learn the key controls for recording and navigation
+  </Card>
+</CardGroup>
+
+## How it works
+
+<Steps>
+  <Step title="Hold Fn to record">
+    Press and hold the **Fn** key anywhere on your Mac. A floating capsule window appears at the bottom of your screen with a live waveform animation driven by your voice.
+  </Step>
+  <Step title="Speak naturally">
+    Dictate your text in any supported language. Real-time transcription appears in the floating window as you speak, powered by Apple's on-device Speech Recognition framework.
+  </Step>
+  <Step title="Release to inject">
+    Release the **Fn** key. Voice Input injects the transcribed text directly into the currently focused input field using a clipboard-based paste mechanism. Your original clipboard content is restored afterward.
+  </Step>
+  <Step title="Optionally refine with LLM">
+    If LLM Refinement is enabled, the floating window shows a **Refining...** status while an OpenAI-compatible model corrects obvious speech recognition errors before injecting the final text.
+  </Step>
+</Steps>
+
+## Key features
+
+- **On-device transcription** — Apple Speech Recognition runs entirely on your Mac; no audio is sent to external servers by default
+- **Real-time waveform** — A 5-bar animated waveform reflects actual audio RMS levels, giving you live visual feedback
+- **Multi-language support** — English, Simplified Chinese, Traditional Chinese, Japanese, and Korean
+- **LLM refinement** — Optional AI post-processing via any OpenAI-compatible API to fix homophones, technical terms, and mixed-language errors
+- **CJK-aware paste** — Automatically switches to an ASCII input source before pasting so CJK input methods don't interfere
+- **Menu-bar only** — Runs silently in the background with no Dock icon
+
+<Note>
+  Voice Input requires macOS 14 (Sonoma) or later, and microphone permission must be granted on first launch.
+</Note>

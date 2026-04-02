@@ -1,0 +1,81 @@
+---
+title: "Selecting a language"
+description: "Switch between the five supported recognition languages from the menu bar. Your selection is saved and remembered across restarts."
+---
+
+Voice Input uses Apple Speech Recognition to transcribe your speech. The recognition engine is language-specific, so selecting the right language before you dictate improves accuracy significantly.
+
+## Default language
+
+Voice Input defaults to **Simplified Chinese (zh-CN)**. If you primarily dictate in another language, change this once and the preference is saved automatically.
+
+## How to switch languages
+
+<Steps>
+  <Step title="Click the menu bar icon">
+    Click the Voice Input icon in your Mac menu bar to open the menu.
+  </Step>
+  <Step title="Select your language">
+    Hover over **Language** to expand the language submenu, then click the language you want to use.
+  </Step>
+  <Step title="Start recording">
+    Your selection takes effect immediately. The next time you hold the Fn key, Voice Input will use the selected language for recognition.
+  </Step>
+</Steps>
+
+<Note>
+  Your language preference is stored in `UserDefaults` and persists across app restarts. You do not need to re-select your language every time you launch Voice Input.
+</Note>
+
+## Supported languages
+
+<Tabs>
+  <Tab title="Overview">
+    | Language | Locale code | Notes |
+    |---|---|---|
+    | English | `en-US` | Strong accuracy for technical vocabulary |
+    | Simplified Chinese | `zh-CN` | Default language; optimized for mixed Chinese-English dictation with LLM Refinement |
+    | Traditional Chinese | `zh-TW` | Suitable for users in Taiwan and Hong Kong |
+    | Japanese | `ja-JP` | Full hiragana, katakana, and kanji recognition |
+    | Korean | `ko-KR` | Hangul recognition |
+  </Tab>
+  <Tab title="English">
+    **Locale:** `en-US`
+
+    English recognition is strong for everyday speech and common technical vocabulary. For specialized terminology (e.g., programming language names, product names), enabling [LLM Refinement](/guides/llm-refinement) can correct misrecognitions that occur when terms sound similar to common words.
+  </Tab>
+  <Tab title="Simplified Chinese">
+    **Locale:** `zh-CN`
+
+    Simplified Chinese is the default language. It handles standard Mandarin well and supports mixed Chinese-English dictation, though technical English terms embedded in Chinese speech may be misrecognized as Chinese homophones. LLM Refinement is especially effective at correcting these errors — for example, converting `配森` back to `Python` or `杰森` back to `JSON`.
+  </Tab>
+  <Tab title="Traditional Chinese">
+    **Locale:** `zh-TW`
+
+    Traditional Chinese recognition uses the same Apple Speech Recognition engine tuned for `zh-TW`. It produces traditional character output by default.
+  </Tab>
+  <Tab title="Japanese">
+    **Locale:** `ja-JP`
+
+    Japanese recognition supports hiragana, katakana, and kanji. Apple Speech Recognition handles natural spoken Japanese and automatically applies the appropriate script based on context.
+  </Tab>
+  <Tab title="Korean">
+    **Locale:** `ko-KR`
+
+    Korean recognition transcribes spoken Korean into Hangul. Standard vocabulary and everyday speech are handled accurately.
+  </Tab>
+</Tabs>
+
+## Tips for multi-language users
+
+<AccordionGroup>
+  <Accordion title="Switch before you dictate">
+    Voice Input does not auto-detect which language you are speaking. If you switch between languages during the day, change the language setting from the menu bar before each session in a different language.
+  </Accordion>
+  <Accordion title="Accuracy varies by language">
+    English and Simplified Chinese have the most mature on-device models on Apple platforms. Accuracy for Japanese and Korean is generally good for everyday speech, but specialized or technical vocabulary may be transcribed less reliably. Using LLM Refinement can help bridge this gap for technical terms.
+  </Accordion>
+  <Accordion title="Mixed-language dictation">
+    If you frequently mix languages (e.g., English technical terms within Chinese sentences), use Simplified Chinese as your base language and enable [LLM Refinement](/guides/llm-refinement). The LLM is specifically tuned to restore English technical terms that the speech engine converts to phonetic Chinese equivalents.
+  </Accordion>
+</AccordionGroup>

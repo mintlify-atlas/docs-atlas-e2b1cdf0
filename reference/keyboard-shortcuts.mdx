@@ -1,0 +1,32 @@
+---
+title: "Keyboard shortcuts"
+description: "Voice Input is controlled entirely by the Fn key. Hold it to record, release to inject your transcribed text."
+---
+
+Voice Input uses a single global shortcut — the **Fn key** — to control the entire recording workflow. There are no other keyboard shortcuts in this version, and none are configurable.
+
+## Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Start recording | Hold **Fn** |
+| Stop recording and inject text | Release **Fn** |
+| Cancel recording | Not supported — releasing always injects |
+
+<Note>
+  Releasing **Fn** always injects the transcribed text into the focused input field. There is no way to discard a recording mid-session. If you release accidentally, the text will be pasted and you can undo it with **Cmd+Z** in most apps.
+</Note>
+
+## Why the Fn key
+
+The Fn key is monitored via a low-level CGEvent tap, which intercepts the key event system-wide before it reaches any other app. As part of this interception, Voice Input suppresses the raw Fn key event — which means the macOS emoji picker (normally triggered by pressing Fn) will **not** appear while Voice Input is running. You can use the Fn key freely without worrying about accidentally opening the emoji panel.
+
+<Note>
+  If the emoji picker does appear when you press Fn, this is a sign that Accessibility permission has not been granted to Voice Input, or that the CGEvent tap is not active. See [Troubleshooting](/reference/troubleshooting) for steps to resolve this.
+</Note>
+
+## Usage tips
+
+- Make sure an input field is focused **before** you press Fn. Click into a text box, search bar, or message composer first.
+- You can speak as long as you need — there is no recording time limit.
+- Real-time transcription appears in the floating capsule HUD while you record, so you can see what Voice Input is hearing before you release.

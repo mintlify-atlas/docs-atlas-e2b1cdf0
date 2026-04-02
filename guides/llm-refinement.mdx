@@ -1,0 +1,114 @@
+---
+title: "LLM refinement"
+description: "Connect an OpenAI-compatible API to automatically fix speech recognition errors — homophones, technical terms, and mixed Chinese-English mistakes — without rewriting your dictation."
+---
+
+LLM Refinement is an optional post-processing step that sends your raw transcription to a language model before it is injected into your app. The model is given a conservative system prompt: it fixes obvious errors only and returns the text unchanged if it looks correct.
+
+## What LLM refinement fixes
+
+Voice Input's LLM prompt is intentionally narrow in scope. It targets errors that Apple Speech Recognition commonly produces but that a language model can reliably correct.
+
+<CardGroup cols={2}>
+  <Card title="Chinese homophones" icon="language">
+    Speech recognition sometimes picks the wrong Chinese character for a syllable. The LLM corrects these when the surrounding context makes the intended word clear.
+  </Card>
+  <Card title="Technical terms rendered as Chinese" icon="code">
+    English technical terms spoken in a Chinese sentence are often phonetically transcribed into Chinese characters. The LLM converts them back to their correct English form.
+  </Card>
+  <Card title="Mixed Chinese-English" icon="globe">
+    Common examples: `配森` → `Python`, `杰森` → `JSON`, `贾瓦` → `Java`. The LLM recognizes these patterns and restores the intended English spelling.
+  </Card>
+  <Card title="Obvious misrecognitions" icon="spell-check">
+    Clear errors where context strongly implies a different word — for example, a product name or command that was transcribed phonetically instead of literally.
+  </Card>
+</CardGroup>
+
+## What LLM refinement does NOT do
+
+<Warning>
+  The system prompt instructs the model to never rewrite, polish, rephrase, or remove content that appears correct. If your dictation is coherent as-is, the model returns it unchanged. LLM Refinement is not an editing assistant.
+</Warning>
+
+Specifically, the model will not:
+
+- Rephrase sentences for clarity or style
+- Fix grammatical issues in text that was dictated grammatically
+- Add punctuation beyond what was spoken
+- Remove words or sentences that seem redundant
+- Summarize or shorten your dictation
+
+## Enabling and disabling refinement
+
+<Steps>
+  <Step title="Open the LLM Refinement submenu">
+    Click the Voice Input icon in the menu bar and hover over **LLM Refinement**.
+  </Step>
+  <Step title="Toggle refinement on or off">
+    Click the **Enable** toggle at the top of the submenu to turn LLM Refinement on or off. When enabled, a checkmark appears next to the toggle.
+
+    <Info>
+      Disabling refinement does not clear your API settings. You can re-enable it at any time without re-entering your credentials.
+    </Info>
+  </Step>
+</Steps>
+
+## Configuring the API connection
+
+<Steps>
+  <Step title="Open Settings">
+    Click the Voice Input icon → **LLM Refinement** → **Settings**.
+  </Step>
+  <Step title="Enter your API Base URL">
+    In the **API Base URL** field, enter the base URL of your OpenAI-compatible API endpoint. See the [compatible APIs](#compatible-apis) section below for examples.
+  </Step>
+  <Step title="Enter your API Key">
+    In the **API Key** field, enter your API key. To remove a stored key entirely, clear the field and save — the field supports being fully emptied.
+  </Step>
+  <Step title="Enter the model name">
+    In the **Model** field, enter the model identifier your API accepts. For example: `gpt-4o-mini`, `gpt-4o`, or a local model name like `llama3`.
+  </Step>
+  <Step title="Test the connection">
+    Click **Test** to verify that Voice Input can reach your API with the credentials you provided. A success or failure message is displayed inline.
+  </Step>
+  <Step title="Save your settings">
+    Click **Save** to store your settings. They persist across app restarts.
+  </Step>
+</Steps>
+
+## The "Refining..." state
+
+After you release the Fn key, if LLM Refinement is enabled and configured, the floating HUD shows **Refining...** instead of immediately dismissing. Voice Input is waiting for the API response. Once the refined text is returned, it is injected and the HUD dismisses.
+
+If the API call fails (network error, invalid key, timeout), Voice Input falls back to injecting the raw transcription without refinement.
+
+## Compatible APIs
+
+Any API that follows the OpenAI chat completions format works with Voice Input.
+
+<Tabs>
+  <Tab title="OpenAI">
+    **API Base URL:** `https://api.openai.com/v1`
+
+    Use your OpenAI API key from [platform.openai.com](https://platform.openai.com). Recommended models: `gpt-4o-mini` (fast, low cost) or `gpt-4o` (higher accuracy).
+  </Tab>
+  <Tab title="Azure OpenAI">
+    **API Base URL:** `https://<your-resource>.openai.azure.com/openai/deployments/<deployment-name>`
+
+    Use your Azure API key and substitute your resource name and deployment name in the URL.
+  </Tab>
+  <Tab title="Ollama (local)">
+    **API Base URL:** `http://localhost:11434/v1`
+
+    Run [Ollama](https://ollama.com) locally and use any pulled model. Set **API Key** to any non-empty string (Ollama does not validate keys). Set **Model** to your local model name, for example `llama3` or `mistral`.
+
+    <Tip>
+      Local models keep your transcriptions fully on-device. No data leaves your Mac.
+    </Tip>
+  </Tab>
+  <Tab title="Other providers">
+    Any provider that exposes an OpenAI-compatible `/chat/completions` endpoint works. Enter the provider's documented base URL and your API key.
+
+    Examples of compatible providers: Groq, Together AI, Mistral AI, Anthropic (via compatibility layer), and self-hosted models via LiteLLM or similar proxies.
+  </Tab>
+</Tabs>

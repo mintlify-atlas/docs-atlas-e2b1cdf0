@@ -1,0 +1,71 @@
+{
+  "projectType": "general",
+  "projectName": "Voice Input",
+  "projectDescription": "A macOS menu-bar app that lets you hold the Fn key to record voice input, transcribes it in real time using Apple Speech Recognition, and injects the text into any focused input field — with optional LLM refinement for improved accuracy.",
+  "theme": "willow",
+  "primaryColor": "#5B6AF0",
+  "lightColor": "#EEF0FD",
+  "darkColor": "#1A1D3A",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/recording",
+              "guides/language-selection",
+              "guides/llm-refinement",
+              "guides/text-injection"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/overview",
+              "configuration/llm-settings",
+              "configuration/permissions"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/keyboard-shortcuts",
+              "reference/supported-languages",
+              "reference/build-from-source",
+              "reference/troubleshooting"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Hold Fn key to record voice, release to inject transcribed text",
+    "Real-time streaming transcription via Apple Speech Recognition",
+    "Floating capsule-shaped HUD with animated waveform visualization",
+    "Multi-language support: English, Simplified Chinese, Traditional Chinese, Japanese, Korean",
+    "LLM refinement via OpenAI-compatible API to fix speech recognition errors",
+    "CJK-aware text injection: temporarily switches to ASCII input source before pasting",
+    "Menu-bar only app (LSUIElement) — no Dock icon",
+    "Built with Swift Package Manager, distributed as a signed .app bundle"
+  ],
+  "publicApiSurface": [
+    "Fn key hold — start recording",
+    "Fn key release — stop recording and inject text",
+    "Menu bar icon — access language settings and LLM refinement options",
+    "LLM Refinement submenu — enable/disable and open Settings",
+    "Settings window — configure API Base URL, API Key, Model; Test and Save",
+    "Language switcher — English, Simplified Chinese, Traditional Chinese, Japanese, Korean",
+    "Makefile targets: build, run, install, clean"
+  ]
+}

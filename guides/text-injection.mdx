@@ -1,0 +1,92 @@
+---
+title: "How text injection works"
+description: "Voice Input uses a clipboard-based paste mechanism to inject text universally across all apps, with special handling for CJK input methods."
+---
+
+When you release the Fn key, Voice Input injects the transcribed text into whichever input field is currently focused. This page explains the mechanism in detail, including why it works the way it does and what to do if injection fails in a specific app.
+
+## The clipboard + Cmd+V mechanism
+
+Voice Input injects text by:
+
+1. Writing the transcribed text to the macOS clipboard
+2. Simulating a **Cmd+V** (paste) keyboard event in the focused app
+3. Restoring the original clipboard contents after paste completes
+
+This approach works universally because nearly every text input on macOS accepts Cmd+V. Voice Input does not use accessibility APIs to insert text character-by-character, which means it works even in apps that restrict or customize keyboard input.
+
+<Info>
+  Your clipboard is fully restored after each injection. Anything you had copied before recording will still be there afterward.
+</Info>
+
+## CJK input method handling
+
+macOS CJK input methods (for Chinese, Japanese, and Korean) intercept keyboard events — including Cmd+V — to route them through the input method's own composition engine. If a CJK input method is active when Voice Input attempts to paste, the text may not appear correctly or may not appear at all.
+
+Voice Input handles this automatically with the following sequence:
+
+<Steps>
+  <Step title="Detect the current input method">
+    Immediately before pasting, Voice Input reads the currently active input source from macOS.
+  </Step>
+  <Step title="Switch to ASCII if needed">
+    If the active input source is a CJK input method (such as Pinyin, Wubi, Zhuyin, or any Japanese or Korean IME), Voice Input temporarily switches to an ASCII input source — specifically the **ABC** or **US** keyboard layout.
+  </Step>
+  <Step title="Paste the text">
+    With the ASCII input source active, Voice Input writes the transcribed text to the clipboard and simulates Cmd+V. Because no CJK input method is intercepting the event, the paste goes directly into the focused field.
+  </Step>
+  <Step title="Restore the original input method">
+    After the paste event is sent, Voice Input switches the input source back to the CJK input method you had active before recording. The switch is transparent — your input method is in the same state it was before you held Fn.
+  </Step>
+  <Step title="Restore the original clipboard">
+    The clipboard is restored to its previous contents, so nothing you had copied is lost.
+  </Step>
+</Steps>
+
+### Why this is necessary
+
+CJK input methods sit between your keyboard and the app. When you press Cmd+V with a CJK IME active, the IME may consume the keystroke or transform it before it reaches the app. By briefly stepping aside to a plain ASCII layout for the paste operation, Voice Input ensures that the simulated Cmd+V reaches the app unmodified.
+
+This behavior is enabled for all CJK input sources automatically. You do not need to configure it.
+
+## Accessibility permission
+
+Text injection requires that Voice Input has **Accessibility** permission on your Mac. Without this permission, Voice Input cannot simulate the Cmd+V keystroke.
+
+<Warning>
+  If text never appears after releasing the Fn key, the most common cause is a missing Accessibility permission.
+</Warning>
+
+To grant the permission:
+
+<Steps>
+  <Step title="Open System Settings">
+    Go to **System Settings → Privacy & Security → Accessibility**.
+  </Step>
+  <Step title="Enable Voice Input">
+    Find **Voice Input** in the list and turn on the toggle next to it. If it is not in the list, click the **+** button and add the app from your Applications folder.
+  </Step>
+  <Step title="Restart Voice Input if needed">
+    In some cases, Voice Input needs to be quit and relaunched after granting Accessibility permission for the change to take effect.
+  </Step>
+</Steps>
+
+## Troubleshooting injection failures
+
+<AccordionGroup>
+  <Accordion title="Text appears in the wrong app or field">
+    Voice Input injects into whichever input field had focus at the moment you released the Fn key. If focus shifted to a different window while you were recording (for example, a notification banner caused a click), the text goes to that window instead. Make sure the target field is focused and uninterrupted before and during recording.
+  </Accordion>
+  <Accordion title="Text does not appear at all">
+    Check that Voice Input has Accessibility permission (see above). Also confirm the target app accepts paste events — a small number of apps (some terminals with custom key bindings, game clients, kiosk-mode apps) may block or intercept Cmd+V.
+  </Accordion>
+  <Accordion title="Text appears with extra characters or the wrong content">
+    This can happen if the clipboard was modified by another process between the time Voice Input wrote to it and the time the paste executed. Clipboard manager utilities that react instantly to clipboard changes are a common cause. Try disabling your clipboard manager temporarily to confirm.
+  </Accordion>
+  <Accordion title="Cmd+V opens something instead of pasting">
+    Some apps remap Cmd+V to a custom action. In these apps, clipboard paste via simulated keystrokes will trigger that custom action instead of a paste. This is a limitation of the clipboard + Cmd+V approach. There is no workaround short of changing the app's key binding or using a different app.
+  </Accordion>
+  <Accordion title="CJK text is partially composed or shows raw pinyin">
+    If your CJK input method was mid-composition (you had typed a partial phonetic sequence before recording), the composition state may interfere with the paste. Commit or cancel any in-progress composition before holding the Fn key.
+  </Accordion>
+</AccordionGroup>

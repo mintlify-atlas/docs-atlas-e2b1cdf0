@@ -1,0 +1,129 @@
+---
+title: "LLM settings"
+description: "Connect Voice Input to an OpenAI-compatible API to automatically refine transcribed text before it is injected into your app."
+---
+
+LLM refinement is an optional post-processing step that sends your raw transcription to an AI model before the text is injected. The model applies very conservative corrections — fixing obvious speech recognition errors such as homophones, mixed-language technical terms (e.g., 配森→Python, 杰森→JSON), and CJK-to-Latin mismatches — and returns the text unchanged if it already looks correct.
+
+<Note>
+  LLM refinement is disabled by default. You need to supply your own API credentials before enabling it. No external requests are made until you explicitly turn it on.
+</Note>
+
+## Opening the Settings window
+
+<Steps>
+  <Step title="Click the menu bar icon">
+    Click the Voice Input icon in your macOS menu bar to open the menu.
+  </Step>
+  <Step title="Open LLM Refinement submenu">
+    Hover over **LLM Refinement** to expand the submenu.
+  </Step>
+  <Step title="Click Settings">
+    Click **Settings** to open the LLM Settings window.
+  </Step>
+</Steps>
+
+## Configurable fields
+
+<ParamField path="API Base URL" type="string" required>
+  The base URL of your OpenAI-compatible API, without a trailing slash. Voice Input appends `/chat/completions` to this URL when making requests.
+
+  Example: `https://api.openai.com/v1`
+</ParamField>
+
+<ParamField path="API Key" type="string">
+  Your API key for the provider. This value is stored in UserDefaults and used in the `Authorization: Bearer` header on every request.
+
+  To fully clear the key, select all text in the field and delete it, then click **Save**.
+</ParamField>
+
+<ParamField path="Model" type="string" required>
+  The model name to request. Must match an identifier accepted by your provider.
+
+  Examples: `gpt-4o`, `gpt-4o-mini`, `claude-3-5-haiku`, `llama3.2`
+</ParamField>
+
+## Test and Save
+
+After filling in your settings, use the two buttons at the bottom of the window:
+
+- **Test** — Sends a lightweight request to your configured endpoint to verify that the API Base URL, API Key, and Model are all valid. A success or error message appears inline.
+- **Save** — Persists all three field values to UserDefaults. Settings are not saved automatically as you type; always click **Save** before closing the window.
+
+<Tip>
+  Click **Test** before **Save** to confirm your credentials work. This avoids saving invalid settings that would silently fail during recording.
+</Tip>
+
+## Provider examples
+
+<Tabs>
+  <Tab title="OpenAI">
+    The standard OpenAI API is the most common choice. `gpt-4o-mini` offers a good balance of speed and accuracy for transcription refinement.
+
+    | Field | Value |
+    |---|---|
+    | API Base URL | `https://api.openai.com/v1` |
+    | API Key | Your OpenAI API key (starts with `sk-`) |
+    | Model | `gpt-4o-mini` |
+
+    ```text
+    API Base URL: https://api.openai.com/v1
+    Model:        gpt-4o-mini
+    ```
+  </Tab>
+  <Tab title="Local Ollama">
+    Ollama lets you run open-weight models entirely on your Mac. Because the request stays local, the API Key field can be set to any non-empty value.
+
+    | Field | Value |
+    |---|---|
+    | API Base URL | `http://localhost:11434/v1` |
+    | API Key | Any value (e.g., `ollama`) |
+    | Model | `llama3.2` |
+
+    ```text
+    API Base URL: http://localhost:11434/v1
+    API Key:      ollama
+    Model:        llama3.2
+    ```
+
+    <Note>
+      Make sure Ollama is running (`ollama serve`) and the model is pulled (`ollama pull llama3.2`) before testing.
+    </Note>
+  </Tab>
+  <Tab title="Other providers">
+    Any API that is compatible with the OpenAI chat completions format works. Examples include Anthropic (via their OpenAI-compatible endpoint), Azure OpenAI, Groq, Together AI, and self-hosted vLLM instances.
+
+    | Field | Value |
+    |---|---|
+    | API Base URL | Your provider's base URL |
+    | API Key | Your provider's API key |
+    | Model | The model identifier your provider accepts |
+
+    Consult your provider's documentation for the correct base URL and model names.
+  </Tab>
+</Tabs>
+
+## How the LLM corrects text
+
+The system prompt sent to the model instructs it to be **very conservative**:
+
+- Fix obvious speech recognition errors — homophones, misheard syllables, technical terms rendered in the wrong script (e.g., 配森→Python, 杰森→JSON, 阿派切→Apache).
+- Never rewrite, polish, or shorten text that already looks correct.
+- Never add content that was not spoken.
+- Return the original text unchanged if no correction is needed.
+
+This means the model acts as a targeted error corrector, not a general-purpose editor. Your dictated text is preserved as closely as possible.
+
+## Enabling and disabling refinement
+
+You can turn LLM refinement on or off without opening the Settings window. From the menu bar:
+
+1. Click the Voice Input icon.
+2. Hover over **LLM Refinement**.
+3. Click the enable/disable toggle at the top of the submenu.
+
+Your API credentials and model name remain saved even when refinement is disabled.
+
+<Warning>
+  If refinement is enabled but your settings are incomplete or invalid, the floating window may stall on **Refining...** after each recording. Use the **Test** button in Settings to verify your configuration, or disable refinement until you have valid credentials.
+</Warning>

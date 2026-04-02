@@ -1,0 +1,91 @@
+---
+title: "Build from source"
+description: "Clone the Voice Input repository and build a signed .app bundle using Swift Package Manager and the provided Makefile."
+---
+
+If you prefer to build Voice Input yourself rather than downloading a pre-built binary, the source repository includes a Makefile that handles the full build and install workflow.
+
+<Note>
+  If you just want to install the app without building it, download the latest release from the [binary distribution repository](https://github.com/yetone/voice-input-dist).
+</Note>
+
+## Prerequisites
+
+Before building, make sure you have the following:
+
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| macOS | 14 (Sonoma) or later | Required by the app itself |
+| Xcode | 15 or later | Provides the Swift toolchain and SDKs |
+| Swift Package Manager | Included with Xcode | No separate installation needed |
+
+Install Xcode from the Mac App Store or from the [Apple Developer downloads page](https://developer.apple.com/download/all/). After installing Xcode, accept the license agreement and install the Command Line Tools if prompted.
+
+## Build steps
+
+<Steps>
+  <Step title="Clone the repository">
+    Clone the source repository to your local machine:
+
+    ```bash
+    git clone https://github.com/yetone/voice-input-src.git
+    cd voice-input-src
+    ```
+  </Step>
+  <Step title="Build the app">
+    Run the build target to compile the Swift package and produce a signed `.app` bundle:
+
+    ```bash
+    make build
+    ```
+
+    The build output is placed in the `build/` directory as `VoiceInput.app`.
+  </Step>
+  <Step title="Run or install">
+    You can either run the app directly from the build directory, or install it to `/Applications`:
+
+    <Tabs>
+      <Tab title="Run directly">
+        ```bash
+        make run
+        ```
+
+        This builds the app (if needed) and launches it immediately.
+      </Tab>
+      <Tab title="Install to /Applications">
+        ```bash
+        make install
+        ```
+
+        This copies `VoiceInput.app` to your `/Applications` folder. You may be prompted for your password.
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>
+
+## Makefile reference
+
+| Target | Description |
+|--------|-------------|
+| `make build` | Builds the signed `.app` bundle |
+| `make run` | Builds and launches the app |
+| `make install` | Installs the `.app` to `/Applications` |
+| `make clean` | Removes all build artifacts |
+
+## Code signing
+
+The Makefile builds a signed `.app` bundle. By default, this uses ad-hoc signing, which works for running the app on your own machine. If you want to distribute the app or use it with stricter Gatekeeper settings, you may need to configure signing with your own Apple Developer certificate.
+
+<Warning>
+  If macOS Gatekeeper blocks the app after building, right-click `VoiceInput.app` and select **Open**, then click **Open** in the confirmation dialog. This is a one-time step for locally built apps that are not notarized.
+</Warning>
+
+## Alternative: binary releases
+
+If you do not want to build from source, pre-built binaries are available from the distribution repository:
+
+<CardGroup cols={1}>
+  <Card title="Binary releases" icon="download" href="https://github.com/yetone/voice-input-dist">
+    Download a pre-built, signed .app bundle from the voice-input-dist repository
+  </Card>
+</CardGroup>

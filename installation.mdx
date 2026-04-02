@@ -1,0 +1,68 @@
+---
+title: "Installation"
+description: "Download and set up Voice Input on your Mac in a few minutes."
+---
+
+## System requirements
+
+- **macOS 14 (Sonoma) or later** — Voice Input uses APIs introduced in macOS 14
+- **Microphone** — built-in or external; required for speech recognition
+- **Accessibility permission** — required to monitor the Fn key globally via CGEvent tap
+
+## Install Voice Input
+
+<Steps>
+  <Step title="Download the latest release">
+    Go to the [voice-input-dist releases page](https://github.com/yetone/voice-input-dist/releases) and download the latest `.zip` file. It contains a pre-built, signed `VoiceInput.app` bundle — no Xcode or compilation required.
+  </Step>
+
+  <Step title="Move the app to your Applications folder">
+    Open the downloaded `.zip` to extract `VoiceInput.app`, then drag it into your `/Applications` folder. This ensures macOS registers it correctly and allows it to request permissions.
+  </Step>
+
+  <Step title="Open the app for the first time">
+    Double-click `VoiceInput.app` in your Applications folder.
+
+    <Warning>
+      macOS Gatekeeper may block the app on first launch with a message like _"VoiceInput.app cannot be opened because the developer cannot be verified."_ If this happens, **do not** click **Move to Trash**. Instead:
+
+      1. Open **System Settings → Privacy & Security**
+      2. Scroll down to the Security section
+      3. Click **Open Anyway** next to the Voice Input message
+
+      Alternatively, right-click (or Control-click) `VoiceInput.app` and choose **Open**, then confirm in the dialog that appears.
+    </Warning>
+
+    After opening successfully, you will see the Voice Input icon appear in your menu bar.
+  </Step>
+
+  <Step title="Grant microphone permission">
+    On first use, macOS prompts you to allow microphone access. Click **Allow** in the system dialog.
+
+    If you missed the prompt or denied it, enable it manually:
+
+    1. Open **System Settings → Privacy & Security → Microphone**
+    2. Find **Voice Input** in the list and toggle it on
+
+    <Note>
+      Voice Input uses Apple's on-device Speech Recognition framework. Your audio is processed locally on your Mac and is never sent to Apple's servers during transcription.
+    </Note>
+  </Step>
+
+  <Step title="Grant Accessibility permission">
+    Voice Input needs Accessibility access to monitor the Fn key globally — without it, the app cannot detect Fn key presses in other applications.
+
+    macOS will prompt you for this permission when you first try to record. To grant it manually:
+
+    1. Open **System Settings → Privacy & Security → Accessibility**
+    2. Click the **+** button and add `VoiceInput.app`, or toggle it on if it already appears in the list
+
+    <Note>
+      You may need to quit and relaunch Voice Input after granting Accessibility permission for the change to take effect.
+    </Note>
+  </Step>
+</Steps>
+
+## Build from source
+
+If you prefer to compile Voice Input yourself — for example, to inspect the code or make modifications — see the [build from source](/reference/build-from-source) guide. Building requires Xcode command-line tools and Swift Package Manager.

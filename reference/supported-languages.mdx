@@ -1,0 +1,44 @@
+---
+title: "Supported languages"
+description: "Voice Input supports five languages for speech transcription, powered by Apple's on-device Speech Recognition framework."
+---
+
+Voice Input supports five languages for transcription. All recognition runs on-device using Apple's Speech Recognition framework — no audio is sent to external servers.
+
+## Supported languages
+
+| Language | Locale | Notes |
+|----------|--------|-------|
+| English | `en-US` | |
+| Simplified Chinese | `zh-CN` | Default language |
+| Traditional Chinese | `zh-TW` | |
+| Japanese | `ja-JP` | |
+| Korean | `ko-KR` | |
+
+The default language is **Simplified Chinese** (`zh-CN`). This is set intentionally so that Chinese speech recognition works out of the box without any configuration.
+
+## Switching languages
+
+To change the active transcription language:
+
+1. Click the Voice Input icon in the menu bar.
+2. Select the language you want from the language list.
+
+Your selection is saved to system preferences and persists across app restarts. You do not need to reconfigure the language each time you launch Voice Input.
+
+## Accuracy and LLM refinement
+
+Transcription accuracy depends on several factors:
+
+- **Your voice and accent** — Speech Recognition performs best with clear, natural speech.
+- **Ambient noise** — Background noise can reduce accuracy. Recording in a quieter environment helps.
+- **Language match** — Make sure the selected language matches the language you are speaking. Mismatched settings are a common cause of poor results.
+- **Mixed-language content** — If you switch between languages mid-sentence (for example, inserting English technical terms while speaking Chinese), transcription accuracy may drop.
+
+<Tip>
+  For mixed-language scenarios — such as Chinese sentences that include English technical terms — enable **LLM Refinement** in the menu bar. The LLM post-processing step is specifically designed to correct common cross-language errors, such as homophones being substituted for the intended English word.
+</Tip>
+
+<Note>
+  Language selection is saved across restarts. You only need to set it once.
+</Note>

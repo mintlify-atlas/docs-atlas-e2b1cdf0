@@ -1,0 +1,110 @@
+---
+title: "Required permissions"
+description: "Voice Input requires Microphone and Accessibility permissions to record audio and monitor the Fn key globally."
+---
+
+Voice Input needs two macOS permissions to function. Without both, either recording or Fn key detection will not work. macOS prompts you for these permissions on first use, but you can also grant them manually through System Settings.
+
+## Why each permission is needed
+
+**Microphone** — Voice Input uses Apple's Speech Recognition framework to transcribe your speech in real time. The framework requires explicit microphone access before it can capture audio.
+
+**Accessibility** — Voice Input monitors the Fn key globally using a `CGEvent` tap, which intercepts keyboard events system-wide so it can detect a Fn press in any app. The `CGEvent` tap API requires Accessibility permission. This is also what prevents the standard Fn key behavior (opening the emoji picker) from firing while you hold the key down.
+
+<Note>
+  Apple Speech Recognition processes audio entirely on your device by default. No audio data is sent to Apple's servers when using on-device recognition. Voice Input does not transmit your audio to any third party.
+</Note>
+
+## Granting Microphone permission
+
+<Steps>
+  <Step title="Open System Settings">
+    Click the Apple menu () in the top-left corner of your screen, then click **System Settings**.
+  </Step>
+  <Step title="Navigate to Privacy & Security">
+    In the sidebar, click **Privacy & Security**.
+  </Step>
+  <Step title="Open Microphone settings">
+    Scroll down and click **Microphone**.
+  </Step>
+  <Step title="Enable Voice Input">
+    Find **Voice Input** in the list of apps and toggle it on.
+  </Step>
+</Steps>
+
+<Warning>
+  If Microphone permission is denied, Voice Input cannot capture any audio. Pressing and holding the Fn key will show the recording HUD, but no transcription will occur and no text will be injected on release.
+</Warning>
+
+## Granting Accessibility permission
+
+<Steps>
+  <Step title="Open System Settings">
+    Click the Apple menu () in the top-left corner of your screen, then click **System Settings**.
+  </Step>
+  <Step title="Navigate to Privacy & Security">
+    In the sidebar, click **Privacy & Security**.
+  </Step>
+  <Step title="Open Accessibility settings">
+    Scroll down and click **Accessibility**.
+  </Step>
+  <Step title="Unlock the list if needed">
+    If the list is locked, click the lock icon at the bottom of the window and enter your macOS password to make changes.
+  </Step>
+  <Step title="Enable Voice Input">
+    Find **Voice Input** in the list and toggle it on.
+  </Step>
+</Steps>
+
+<Warning>
+  If Accessibility permission is denied, Voice Input cannot install its `CGEvent` tap. The Fn key will not trigger recording in any app, and the emoji picker will appear as usual when you press Fn. The app will launch but remain non-functional.
+</Warning>
+
+## What happens if permissions are missing
+
+| Permission | Missing effect |
+|---|---|
+| Microphone | Recording HUD may appear, but no audio is captured and no text is produced |
+| Accessibility | Fn key is not intercepted; recording never starts; emoji picker fires normally |
+
+If Voice Input is not working as expected, open **System Settings → Privacy & Security** and confirm that both toggles are enabled.
+
+## Resetting permissions
+
+If you want to revoke and re-grant a permission — for example, after reinstalling the app — you can do so directly in System Settings.
+
+<Steps>
+  <Step title="Open System Settings">
+    Click the Apple menu () and click **System Settings**.
+  </Step>
+  <Step title="Navigate to Privacy & Security">
+    Click **Privacy & Security** in the sidebar.
+  </Step>
+  <Step title="Locate the permission">
+    Click **Microphone** or **Accessibility**, depending on which permission you want to reset.
+  </Step>
+  <Step title="Toggle Voice Input off, then on">
+    Disable Voice Input in the list, then re-enable it. macOS will apply the change immediately without requiring a restart.
+  </Step>
+</Steps>
+
+<Tip>
+  After toggling Accessibility permission, you may need to quit and relaunch Voice Input for the `CGEvent` tap to be re-registered correctly.
+</Tip>
+
+## Privacy summary
+
+<AccordionGroup>
+  <Accordion title="Does Voice Input send my audio anywhere?">
+    No. Transcription is handled by Apple's Speech Recognition framework using on-device models. Your audio is processed locally on your Mac and is not sent to Apple's servers or any third-party service.
+  </Accordion>
+  <Accordion title="Does LLM refinement send my audio anywhere?">
+    LLM refinement sends only the **text** produced by on-device transcription to the API endpoint you configure. No audio is ever transmitted. You control which endpoint receives the text by setting your own API Base URL and key.
+  </Accordion>
+  <Accordion title="Why does Voice Input need Accessibility if it only types text?">
+    macOS restricts global keyboard event monitoring to apps that have been granted Accessibility permission. Without it, an app can only receive keyboard events while it is the frontmost application. Since Voice Input needs to detect the Fn key in any app without taking focus, Accessibility access is required.
+  </Accordion>
+  <Accordion title="Can I use Voice Input without granting Accessibility permission?">
+    No. The global Fn key tap is the core mechanism that triggers recording. Without Accessibility permission, the tap cannot be installed and the app cannot function. Microphone permission alone is not sufficient.
+  </Accordion>
+</AccordionGroup>

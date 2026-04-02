@@ -1,0 +1,104 @@
+---
+title: "Troubleshooting"
+description: "Solutions to common issues with Voice Input, including permission problems, text injection failures, and LLM refinement errors."
+---
+
+<Note>
+  If you cannot find a solution here, open an issue on the [Voice Input GitHub repository](https://github.com/yetone/voice-input-src/issues) for additional help.
+</Note>
+
+<AccordionGroup>
+  <Accordion title="Fn key doesn't trigger recording">
+    Voice Input monitors the Fn key via a system-level CGEvent tap, which requires Accessibility permission.
+
+    1. Open **System Settings** → **Privacy & Security** → **Accessibility**.
+    2. Make sure **Voice Input** appears in the list and its toggle is turned on.
+    3. If Voice Input is not in the list, launch the app first — it will prompt you to grant permission.
+    4. After granting permission, you may need to quit and relaunch Voice Input for the change to take effect.
+
+    Also confirm that the app is running: look for the Voice Input icon in your menu bar. If the icon is missing, the app is not running.
+  </Accordion>
+
+  <Accordion title="No text is injected after releasing Fn">
+    If you release the Fn key but nothing is typed into the target field, check the following:
+
+    - **Microphone permission** — Open **System Settings** → **Privacy & Security** → **Microphone** and confirm Voice Input is listed and enabled.
+    - **Focused input field** — Text injection only works when an input field is focused. Click directly into a text box, search bar, or message composer before holding Fn.
+    - **Try again** — Click into the input field to re-establish focus, then hold Fn and speak again.
+
+    If microphone permission was just granted, you may need to relaunch Voice Input.
+  </Accordion>
+
+  <Accordion title="Text is injected into the wrong place">
+    Voice Input pastes text into whatever input field was focused at the moment you release the Fn key. If your focus shifts while recording — for example, if a notification appears and you click it — the text may land in an unintended field.
+
+    To avoid this: click directly into your target input field **before** pressing Fn, and avoid interacting with anything else while recording.
+  </Accordion>
+
+  <Accordion title="CJK input method interfering with paste">
+    Voice Input automatically handles CJK input method conflicts. Before injecting text, it detects whether a CJK input method (such as Pinyin or Cangjie) is active and temporarily switches to an ASCII input source (ABC/US keyboard) to prevent the input method from intercepting the Cmd+V paste. It then restores your original input method.
+
+    If you are still seeing interference:
+
+    - Make sure **Accessibility permission** is granted — Voice Input needs it to switch input sources.
+    - Try manually switching to an ASCII input method before recording as a workaround.
+    - Relaunch Voice Input to reset its state.
+  </Accordion>
+
+  <Accordion title="The emoji picker appears when pressing Fn">
+    This should not happen. Voice Input suppresses the Fn key event at the system level specifically to prevent the emoji picker from opening.
+
+    If the emoji picker is still appearing:
+
+    - **Accessibility permission is likely missing.** Open **System Settings** → **Privacy & Security** → **Accessibility** and ensure Voice Input is listed and enabled.
+    - Without Accessibility permission, the CGEvent tap cannot intercept the Fn key, so macOS processes it normally and opens the emoji picker.
+
+    After granting permission, relaunch Voice Input.
+  </Accordion>
+
+  <Accordion title="LLM refinement shows an error">
+    If the floating window shows an error during the Refining step, your LLM settings may be misconfigured.
+
+    1. Click the Voice Input icon in the menu bar.
+    2. Go to **LLM Refinement** → **Settings**.
+    3. Check the **API Base URL**, **API Key**, and **Model** fields for typos or missing values.
+    4. Click **Test** to send a test request and see the error message directly.
+    5. Click **Save** after making any corrections.
+
+    Common issues include an incorrect base URL (make sure it ends in `/v1` if required by your provider), an expired or invalid API key, or a model name that does not exist on your provider.
+  </Accordion>
+
+  <Accordion title="App doesn't appear in menu bar">
+    If you cannot see the Voice Input icon in the menu bar, the app may not be running or may have crashed.
+
+    - Open **Finder** → **Applications** and double-click **VoiceInput** to relaunch it.
+    - If you built from source, run `make run` in the project directory to rebuild and launch.
+    - Check whether your menu bar is full — macOS hides overflow menu bar icons. Try closing other menu bar apps to free up space.
+
+    Voice Input runs in LSUIElement mode (no Dock icon), so the menu bar icon is the only indication that it is running.
+  </Accordion>
+
+  <Accordion title="Speech recognition is inaccurate">
+    Transcription accuracy is affected by your environment and settings. Try the following:
+
+    - **Speak slowly and clearly**, especially for names, technical terms, or uncommon words.
+    - **Check the selected language** — the transcription language must match the language you are speaking. Click the menu bar icon to confirm and switch if needed.
+    - **Reduce background noise** — recording in a quieter environment significantly improves accuracy.
+    - **Enable LLM Refinement** — for mixed-language content (such as English technical terms spoken in a Chinese sentence), the LLM post-processing step can correct common recognition errors like homophones and transliterated words.
+  </Accordion>
+
+  <Accordion title="macOS Gatekeeper blocks the app">
+    If you downloaded a pre-built binary or built the app yourself and macOS shows a warning that the app cannot be opened:
+
+    1. **Do not click Move to Trash.**
+    2. Right-click (or Control-click) `VoiceInput.app` in Finder.
+    3. Select **Open** from the context menu.
+    4. In the dialog that appears, click **Open**.
+
+    This grants a one-time exception for the app. You will not need to repeat this step on subsequent launches.
+
+    <Warning>
+      Only do this if you trust the source of the app. If you built from source yourself, this is safe. If you downloaded the app, make sure it came from the [official distribution repository](https://github.com/yetone/voice-input-dist).
+    </Warning>
+  </Accordion>
+</AccordionGroup>

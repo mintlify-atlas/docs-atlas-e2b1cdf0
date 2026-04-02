@@ -1,0 +1,73 @@
+---
+title: "Recording voice input"
+description: "Learn how to use the Fn key to record speech, what the floating HUD displays, and how your text is injected after you release the key."
+---
+
+Voice Input uses a single key — the **Fn key** — to start and stop recording. There is nothing to open and no mode to activate: hold the key, speak, and release.
+
+## How the Fn key trigger works
+
+<Steps>
+  <Step title="Hold the Fn key to start recording">
+    Press and hold the **Fn** key anywhere on your Mac. Voice Input immediately begins capturing audio from your microphone and the floating HUD appears at the bottom of your screen.
+
+    <Note>
+      The Fn key event is suppressed by Voice Input, which prevents macOS from opening the emoji picker. This is intentional — releasing the Fn key will inject your transcribed text instead.
+    </Note>
+  </Step>
+  <Step title="Speak naturally">
+    Dictate your text while holding the key. Real-time transcription appears in the HUD as you speak. The waveform on the left reflects your actual audio levels — louder speech produces taller bars, quiet moments produce shorter ones.
+  </Step>
+  <Step title="Release the Fn key to inject">
+    Release the **Fn** key to stop recording. Voice Input immediately injects the transcribed text into the currently focused input field. If LLM Refinement is enabled and configured, the HUD briefly shows **Refining...** while the text is being processed before injection.
+  </Step>
+</Steps>
+
+## The floating HUD
+
+While recording, a capsule-shaped floating window appears centered at the bottom of your screen. It has a frosted-glass appearance and contains two elements side by side.
+
+**Waveform animation** — Five vertical bars on the left visualize your voice in real time. The bars are driven by actual audio RMS levels measured from your microphone, so they respond directly to how loudly and quietly you speak. The center bar is the tallest by weight, giving the waveform a natural bell-curve silhouette.
+
+**Live transcription** — A text label on the right shows the transcription as Apple Speech Recognition processes your speech. The capsule widens smoothly as more text appears, from a minimum width of 160 px up to 560 px.
+
+The window animates in with a spring (0.35 s), scales out on dismissal (0.22 s), and the text area transitions width over 0.25 s as words accumulate.
+
+<Info>
+  The HUD is non-activating — it never steals focus from the app you are dictating into.
+</Info>
+
+## The "Refining..." state
+
+If you have [LLM Refinement](/guides/llm-refinement) enabled and configured, the HUD shows a **Refining...** label after you release the Fn key. Voice Input is waiting for the LLM to process the raw transcription before injecting the final corrected text. This typically takes one to two seconds depending on your API endpoint.
+
+If LLM Refinement is disabled or not yet configured, text is injected immediately on key release.
+
+## Tips for accurate recordings
+
+<AccordionGroup>
+  <Accordion title="Record in a quiet environment">
+    Apple Speech Recognition performs best when background noise is minimal. Using Voice Input in a noisy space can introduce transcription errors that even LLM Refinement may not catch.
+  </Accordion>
+  <Accordion title="Speak clearly and at a moderate pace">
+    Avoid trailing off at the end of sentences. Enunciate technical terms, proper nouns, and acronyms clearly — or enable LLM Refinement to correct common misrecognitions automatically.
+  </Accordion>
+  <Accordion title="Pause before releasing the key">
+    If you release the Fn key mid-syllable, the final word may be cut off or misrecognized. Finish your sentence fully and pause for a brief moment before releasing.
+  </Accordion>
+  <Accordion title="Position the microphone correctly">
+    The built-in MacBook microphone works well. If you use an external microphone, make sure it is selected as the input device in **System Settings → Sound → Input**.
+  </Accordion>
+</AccordionGroup>
+
+## What happens after injection
+
+Once text is injected, Voice Input:
+
+1. Restores your original clipboard contents — anything you had copied before recording is preserved
+2. Dismisses the floating HUD with a brief scale-out animation
+3. Returns to its silent background state, ready for the next recording
+
+<Tip>
+  If text does not appear in your target app, check that the correct input field was focused before you pressed the Fn key, and that Voice Input has Accessibility permission. See [How text injection works](/guides/text-injection) for details.
+</Tip>
